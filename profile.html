@@ -1,0 +1,394 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="theme-color" content="#e11d48">
+  <title>BlockHunt • Profile</title>
+
+  <!-- Bootstrap & Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+
+  <link href="../styles.css" rel="stylesheet">
+  <link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="../favicon.png">
+</head>
+<body>
+
+  <!-- Desktop Navbar -->
+  <nav class="navbar navbar-expand-lg">
+    <div class="container">
+      <a class="navbar-brand d-flex align-items-center gap-2" href="home.html">
+        <i class="bi bi-qr-code-scan"></i> BlockHunt
+      </a>
+      <div class="ms-auto d-none d-lg-flex gap-2">
+        <a class="btn btn-ghost" href="challenges.html"><i class="bi bi-list-task me-1"></i>Challenges</a>
+        <a class="btn btn-brand" href="studio.html"><i class="bi bi-code-slash me-1"></i>Studio</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Mobile AppBar -->
+  <div class="appbar py-2">
+    <div class="container d-flex align-items-center justify-content-between">
+      <div class="brand">BlockHunt</div>
+      <div class="d-flex gap-2">
+        <a class="btn btn-ghost btn-sm" href="challenges.html"><i class="bi bi-list-task"></i></a>
+        <a class="btn btn-brand btn-sm" href="studio.html"><i class="bi bi-code-slash"></i></a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main -->
+  <main class="container py-4">
+    <!-- User Profile -->
+    <div class="panel p-3 p-md-4 mb-3">
+      <div class="d-flex align-items-center gap-3">
+        <div class="avatar" id="avatar">BC</div>
+        <div class="flex-grow-1">
+          <div class="d-flex align-items-center gap-2 flex-wrap">
+            <h1 class="h5 mb-0" id="userName">Student Name</h1>
+          </div>
+          <div class="muted small" id="userEmail">student@example.com</div>
+        </div>
+        <div class="d-none d-md-flex gap-2">
+          <a class="btn btn-ghost" href="challenges.html"><i class="bi bi-list-task me-1"></i>Challenges</a>
+          <a class="btn btn-brand" href="studio.html"><i class="bi bi-code-slash me-1"></i>Open Studio</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Block Stats (AR inventory) -->
+    <div class="row g-3 equal-row mb-3">
+      <div class="col-md-4">
+        <div class="panel p-3 h-100">
+          <div class="muted small">Total Blocks</div>
+          <div class="display-6 fw-bold" id="statTotal">0</div>
+          <div class="small">All available in curriculum</div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="panel p-3 h-100">
+          <div class="muted small">Collected (AR)</div>
+          <div class="display-6 fw-bold" id="statCollected">0</div>
+          <div class="progress mt-2">
+            <div class="progress-bar" id="barCollected" style="width:0%"></div>
+          </div>
+          <div class="small mt-1"><span id="pctCollected">0%</span> complete</div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="panel p-3 h-100">
+          <div class="muted small">Missing</div>
+          <div class="display-6 fw-bold" id="statMissing">0</div>
+          <div class="small">Keep scanning QR codes to unlock more!</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Challenge Stats -->
+    <div class="row g-3 equal-row mb-3">
+      <div class="col-md-3">
+        <div class="panel p-3 h-100">
+          <div class="muted small">Solved</div>
+          <div class="display-6 fw-bold" id="qsSolved">0</div>
+          <div class="progress mt-2">
+            <div class="progress-bar" id="barSolved" style="width:0%"></div>
+          </div>
+          <div class="small mt-1"><span id="qsSolvedOf">0 of 0</span> challenges</div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="panel p-3 h-100">
+          <div class="muted small">Attempts</div>
+          <div class="display-6 fw-bold" id="qsAttempts">0</div>
+          <div class="small">Submissions from Studio</div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="panel p-3 h-100">
+          <div class="muted small">Success Rate</div>
+          <div class="display-6 fw-bold"><span id="qsRate">0</span>%</div>
+          <div class="small">Solved / Attempts</div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="panel p-3 h-100">
+          <div class="muted small">Streak</div>
+          <div class="display-6 fw-bold" id="qsStreak">0</div>
+          <div class="small">Best <span id="qsBestStreak">0</span> days</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Recent Solves -->
+    <div class="panel p-3 mb-3">
+      <h6 class="panel-title mb-2">Recent Solves</h6>
+      <div id="recentList" class="vstack gap-2"></div>
+    </div>
+
+    <!-- Filters / Search for Blocks -->
+    <div class="panel p-3 mb-3">
+      <div class="toolbar d-flex flex-wrap align-items-center gap-2">
+        <div class="btn-group" role="group" aria-label="Filter">
+          <button class="btn btn-ghost active" data-filter="all" id="fltAll"><i class="bi bi-grid-3x3-gap me-1"></i>All</button>
+          <button class="btn btn-ghost" data-filter="collected" id="fltCollected"><i class="bi bi-check2-circle me-1"></i>Collected</button>
+          <button class="btn btn-ghost" data-filter="missing" id="fltMissing"><i class="bi bi-dash-circle me-1"></i>Missing</button>
+        </div>
+        <div class="ms-auto d-flex align-items-center gap-2 flex-wrap">
+          <span class="chip cat-logic"><i class="bi bi-braces"></i> Logic</span>
+          <span class="chip cat-loops"><i class="bi bi-arrow-repeat"></i> Loops</span>
+          <span class="chip cat-math"><i class="bi bi-123"></i> Math</span>
+          <span class="chip cat-text"><i class="bi bi-chat-dots"></i> Text</span>
+          <span class="chip cat-lists"><i class="bi bi-list-ul"></i> Lists</span>
+          <span class="chip cat-vars"><i class="bi bi-sliders"></i> Variables</span>
+          <span class="chip cat-func"><i class="bi bi-puzzle"></i> Functions</span>
+        </div>
+        <div class="ms-auto" style="min-width:220px">
+          <input type="search" class="form-control" id="searchBox" placeholder="Search blocks…">
+        </div>
+      </div>
+    </div>
+
+    <!-- Inventory -->
+    <div class="row g-3" id="inventoryGrid"></div>
+
+    <div class="mt-4 small muted">
+      Tip: Blocks are collected via AR QR scans and synced to your account; you can then use them in the Studio. Missing a block? Scan more codes around campus!
+    </div>
+  </main>
+  <button class="fab d-inline-flex align-items-center" id="fabScan">
+    <i class="bi bi-qr-code-scan"></i> Scan
+  </button>
+<a href="admin.html"><button class="fab fab--secondary fab-admin fab--sm" id="fabAdmin" aria-label="Open Admin">
+  <i class="bi bi-shield-lock"></i><span class="fab-label">Admin</span>
+</button></a>
+  <!-- Bottom Tab Bar -->
+  <nav class="tabbar d-flex align-items-center gap-2">
+    <a class="tab" href="home.html"><i class="bi bi-house"></i><span class="label">Home</span></a>
+    <a class="tab" href="challenges.html"><i class="bi bi-list-task"></i><span class="label">Challenges</span></a>
+    <a class="tab" href="studio.html"><i class="bi bi-code-slash"></i><span class="label">Studio</span></a>
+    <a class="tab active" href="profile.html"><i class="bi bi-person"></i><span class="label">Profile</span></a>
+  </nav>
+
+  <script>
+    /* (JS unchanged; your existing logic here) */
+    const QUESTION_CATALOG = [
+      { id:'sum-1-to-n', title:'Sum from 1 to n', difficulty:'easy' },
+      { id:'reverse-string', title:'Reverse a String', difficulty:'easy' },
+      { id:'count-vowels', title:'Count Vowels', difficulty:'medium' },
+      { id:'max-in-list', title:'Maximum in List', difficulty:'medium' },
+      { id:'prime-check', title:'Prime Check', difficulty:'hard' }
+    ];
+    const TOTAL_QUESTIONS = QUESTION_CATALOG.length;
+    const qMeta = Object.fromEntries(QUESTION_CATALOG.map(q => [q.id, q]));
+
+    const CATALOG = [/* ...same as before... */
+      { id:'controls_if', name:'if / else', cat:'Logic', icon:'bi-braces' },
+      { id:'logic_compare', name:'compare', cat:'Logic', icon:'bi-braces' },
+      { id:'logic_operation', name:'and/or', cat:'Logic', icon:'bi-braces' },
+      { id:'logic_negate', name:'not', cat:'Logic', icon:'bi-braces' },
+      { id:'logic_boolean', name:'true/false', cat:'Logic', icon:'bi-braces' },
+      { id:'logic_null', name:'null', cat:'Logic', icon:'bi-braces' },
+      { id:'logic_ternary', name:'condition ? x : y', cat:'Logic', icon:'bi-braces' },
+      { id:'controls_repeat_ext', name:'repeat n times', cat:'Loops', icon:'bi-arrow-repeat' },
+      { id:'controls_whileUntil', name:'while / until', cat:'Loops', icon:'bi-arrow-repeat' },
+      { id:'controls_for', name:'for i from…to…by…', cat:'Loops', icon:'bi-arrow-repeat' },
+      { id:'controls_forEach', name:'for each item in list', cat:'Loops', icon:'bi-arrow-repeat' },
+      { id:'controls_flow_statements', name:'break/continue', cat:'Loops', icon:'bi-arrow-repeat' },
+      { id:'math_number', name:'number', cat:'Math', icon:'bi-123' },
+      { id:'math_arithmetic', name:'+ - × ÷', cat:'Math', icon:'bi-123' },
+      { id:'math_single', name:'√ abs log…', cat:'Math', icon:'bi-123' },
+      { id:'math_trig', name:'sin cos tan…', cat:'Math', icon:'bi-123' },
+      { id:'math_constant', name:'π e φ…', cat:'Math', icon:'bi-123' },
+      { id:'math_number_property', name:'is even? prime?…', cat:'Math', icon:'bi-123' },
+      { id:'math_change', name:'change by', cat:'Math', icon:'bi-123' },
+      { id:'math_round', name:'round / ceil / floor', cat:'Math', icon:'bi-123' },
+      { id:'math_modulo', name:'mod', cat:'Math', icon:'bi-123' },
+      { id:'math_random_int', name:'random int', cat:'Math', icon:'bi-123' },
+      { id:'math_random_float', name:'random float', cat:'Math', icon:'bi-123' },
+      { id:'text', name:'text', cat:'Text', icon:'bi-chat-dots' },
+      { id:'text_join', name:'join', cat:'Text', icon:'bi-chat-dots' },
+      { id:'text_length', name:'length', cat:'Text', icon:'bi-chat-dots' },
+      { id:'text_isEmpty', name:'is empty', cat:'Text', icon:'bi-chat-dots' },
+      { id:'text_indexOf', name:'find', cat:'Text', icon:'bi-chat-dots' },
+      { id:'text_charAt', name:'char at', cat:'Text', icon:'bi-chat-dots' },
+      { id:'text_getSubstring', name:'substring', cat:'Text', icon:'bi-chat-dots' },
+      { id:'text_changeCase', name:'UPPER/lower', cat:'Text', icon:'bi-chat-dots' },
+      { id:'text_trim', name:'trim', cat:'Text', icon:'bi-chat-dots' },
+      { id:'text_print', name:'print', cat:'Text', icon:'bi-chat-dots' },
+      { id:'lists_create_with', name:'make list', cat:'Lists', icon:'bi-list-ul' },
+      { id:'lists_repeat', name:'repeat item', cat:'Lists', icon:'bi-list-ul' },
+      { id:'lists_length', name:'length of list', cat:'Lists', icon:'bi-list-ul' },
+      { id:'lists_isEmpty', name:'list is empty?', cat:'Lists', icon:'bi-list-ul' },
+      { id:'lists_indexOf', name:'index of', cat:'Lists', icon:'bi-list-ul' },
+      { id:'lists_getIndex', name:'get item', cat:'Lists', icon:'bi-list-ul' },
+      { id:'lists_setIndex', name:'set item', cat:'Lists', icon:'bi-list-ul' },
+      { id:'lists_getSublist', name:'sublist', cat:'Lists', icon:'bi-list-ul' },
+      { id:'lists_split', name:'split/join text', cat:'Lists', icon:'bi-list-ul' },
+      { id:'lists_sort', name:'sort', cat:'Lists', icon:'bi-list-ul' },
+      { id:'VARIABLE', name:'Variables', cat:'Variables', icon:'bi-sliders' },
+      { id:'PROCEDURE', name:'Functions', cat:'Functions', icon:'bi-puzzle' }
+    ];
+
+    const LS_USER='BlockHunt_user', LS_BLOCKS='BlockHunt_collected_set', LS_SOLVED_SET='BlockHunt_solved_set', LS_SOLVE_LOG='BlockHunt_solve_log';
+
+    function loadUser(){ const d=JSON.parse(localStorage.getItem(LS_USER)||'{}'); return {name:d.name||'Student Name',email:d.email||'student@example.com',role:d.role||'Learner'};}
+    function loadCollectedSet(){ const raw=localStorage.getItem(LS_BLOCKS); if(!raw)return new Set(); try{return new Set(JSON.parse(raw))}catch{return new Set()} }
+    function persistCollectedSet(set){ localStorage.setItem(LS_BLOCKS, JSON.stringify([...set])); }
+    function loadSolvedSet(){ const raw=localStorage.getItem(LS_SOLVED_SET); if(!raw)return new Set(); try{return new Set(JSON.parse(raw))}catch{return new Set()} }
+    function loadSolveLog(){ const raw=localStorage.getItem(LS_SOLVE_LOG); if(!raw)return []; try{return JSON.parse(raw)||[]}catch{return []} }
+
+    const grid=document.getElementById('inventoryGrid');
+    const searchBox=document.getElementById('searchBox');
+    const statTotal=document.getElementById('statTotal');
+    const statCollected=document.getElementById('statCollected');
+    const statMissing=document.getElementById('statMissing');
+    const pctCollected=document.getElementById('pctCollected');
+    const barCollected=document.getElementById('barCollected');
+    const qsSolved=document.getElementById('qsSolved');
+    const qsAttempts=document.getElementById('qsAttempts');
+    const qsRate=document.getElementById('qsRate');
+    const qsStreak=document.getElementById('qsStreak');
+    const qsBestStreak=document.getElementById('qsBestStreak');
+    const qsSolvedOf=document.getElementById('qsSolvedOf');
+    const barSolved=document.getElementById('barSolved');
+    const recentList=document.getElementById('recentList');
+
+    let filterMode='all';
+    let collected=loadCollectedSet();
+
+    function matchesFilter(id){ const has=collected.has(id); if(filterMode==='collected')return has; if(filterMode==='missing')return !has; return true; }
+    function matchesSearch(name){ const q=(searchBox.value||'').trim().toLowerCase(); if(!q)return true; return name.toLowerCase().includes(q); }
+    function catClass(cat){ switch((cat||'').toLowerCase()){case'logic':return'cat-logic';case'loops':return'cat-loops';case'math':return'cat-math';case'text':return'cat-text';case'lists':return'cat-lists';case'variables':return'cat-vars';case'functions':return'cat-func';default:return'';} }
+    function fmtDate(ts){ const d=new Date(ts); return d.toLocaleDateString()+' '+d.toLocaleTimeString(); }
+
+    function renderBlockStats(){
+      const total=CATALOG.filter(b=>b.id!=='VARIABLE'&&b.id!=='PROCEDURE').length;
+      const have=[...collected].filter(id=>CATALOG.some(b=>b.id===id&&b.id!=='VARIABLE'&&b.id!=='PROCEDURE')).length;
+      const miss=Math.max(total-have,0);
+      const pct=total?Math.round((have/total)*100):0;
+      statTotal.textContent=total;
+      statCollected.textContent=have;
+      statMissing.textContent=miss;
+      pctCollected.textContent=pct+'%';
+      barCollected.style.width=pct+'%';
+    }
+
+    function blockCard(b){
+      const has=collected.has(b.id);
+      const icon=b.icon||'bi-box';
+      const badge=has
+        ? '<span class="badge rounded-pill bg-warning-subtle text-warning-emphasis"><i class="bi bi-check2"></i> collected</span>'
+        : '<span class="badge rounded-pill bg-secondary-subtle text-secondary-emphasis"><i class="bi bi-plus-circle"></i> missing</span>';
+      const action=has
+        ? `<button class="btn btn-sm btn-ghost remove" data-id="${b.id}"><i class="bi bi-x-circle me-1"></i>Remove</button>`
+        : `<button class="btn btn-sm btn-ghost add" data-id="${b.id}"><i class="bi bi-check2-circle me-1"></i>Mark Collected</button>`;
+      return `
+        <div class="col-12 col-md-6 col-lg-4">
+          <div class="block-card ${has?'collected':''} ${catClass(b.cat)}">
+            <div class="left">
+              <i class="bi ${icon}"></i>
+              <div>
+                <div class="name">${b.name}</div>
+                <div class="d-flex align-items-center gap-2">
+                  <span class="cat-badge">${b.cat}</span>
+                  ${badge}
+                </div>
+              </div>
+            </div>
+            <div>${action}</div>
+          </div>
+        </div>`;
+    }
+
+    function renderGrid(){
+      const items=CATALOG
+        .filter(b=>b.id!=='VARIABLE'&&b.id!=='PROCEDURE')
+        .filter(b=>matchesFilter(b.id))
+        .filter(b=>matchesSearch(b.name));
+      grid.innerHTML=items.map(blockCard).join('')||`
+        <div class="col-12">
+          <div class="panel p-4 text-center">
+            <div class="mb-2"><i class="bi bi-search" style="font-size:1.5rem"></i></div>
+            <div class="fw-bold">No blocks match your filters.</div>
+            <div class="muted">Try clearing search or scanning more AR codes around campus.</div>
+          </div>
+        </div>`;
+      grid.querySelectorAll('button.add').forEach(btn=>{
+        btn.addEventListener('click',()=>{
+          collected.add(btn.dataset.id);
+          persistCollectedSet(collected);
+          renderBlockStats(); renderGrid();
+        });
+      });
+      grid.querySelectorAll('button.remove').forEach(btn=>{
+        btn.addEventListener('click',()=>{
+          collected.delete(btn.dataset.id);
+          persistCollectedSet(collected);
+          renderBlockStats(); renderGrid();
+        });
+      });
+    }
+
+    document.getElementById('fltAll').addEventListener('click',function(){filterMode='all';setActive(this);renderGrid();});
+    document.getElementById('fltCollected').addEventListener('click',function(){filterMode='collected';setActive(this);renderGrid();});
+    document.getElementById('fltMissing').addEventListener('click',function(){filterMode='missing';setActive(this);renderGrid();});
+    function setActive(btn){ document.querySelectorAll('[data-filter]').forEach(b=>b.classList.remove('active')); btn.classList.add('active'); }
+    searchBox.addEventListener('input',renderGrid);
+
+    function renderChallengeStats(){
+      const solvedSet=loadSolvedSet();
+      const log=(loadSolveLog()||[]).filter(e=>e&&e.id);
+      const solvedCount=solvedSet.size;
+      const attempts=log.length;
+      const successes=log.filter(e=>e.success).length;
+      const rate=attempts?Math.round((successes/attempts)*100):0;
+
+      const successDays=new Set(log.filter(e=>e.success).map(e=>(new Date(e.ts)).toISOString().slice(0,10)));
+      function dateStr(d){return d.toISOString().slice(0,10);} function addDays(d,delta){const x=new Date(d);x.setDate(x.getDate()+delta);return x;}
+      let cur=0, day=new Date(); while(successDays.has(dateStr(day))){cur++; day=addDays(day,-1);}
+      const daysSorted=[...successDays].sort(); let best=0,run=0,prev=null;
+      for(const ds of daysSorted){ if(!prev){run=1;} else { const p=new Date(prev), n=new Date(ds); const diff=Math.round((n-p)/86400000); run=(diff===1)?run+1:1; } best=Math.max(best,run); prev=ds; }
+
+      qsSolved.textContent=solvedCount;
+      qsSolvedOf.textContent=`${solvedCount} of ${TOTAL_QUESTIONS}`;
+      barSolved.style.width=TOTAL_QUESTIONS?(Math.round((solvedCount/TOTAL_QUESTIONS)*100)+'%'):'0%';
+      qsAttempts.textContent=attempts;
+      qsRate.textContent=rate;
+      qsStreak.textContent=cur;
+      qsBestStreak.textContent=best;
+
+      const recent=log.filter(e=>e.success).sort((a,b)=>b.ts-a.ts).slice(0,5);
+      recentList.innerHTML=recent.length?recent.map(e=>{
+        const meta=qMeta[e.id]||{title:e.id,difficulty:'easy'};
+        const diffClass=meta.difficulty==='hard'?'badge-hard':meta.difficulty==='medium'?'badge-medium':'badge-easy';
+        return `
+          <div class="d-flex align-items-center justify-content-between py-1 px-2 border rounded-3">
+            <div class="d-flex align-items-center gap-2">
+              <span class="badge ${diffClass} text-uppercase">${meta.difficulty||'easy'}</span>
+              <div class="fw-semibold">${meta.title||e.id}</div>
+            </div>
+            <div class="small muted">${fmtDate(e.ts)}</div>
+          </div>`;
+      }).join(''):`<div class="text-center muted">No solves yet. Pick one in <a href="challenges.html">Challenges</a>!</div>`;
+    }
+
+    (function hydrateUser(){
+      const u=loadUser();
+      document.getElementById('userName').textContent=u.name;
+      document.getElementById('userEmail').textContent=u.email;
+      document.getElementById('avatar').textContent=(u.name||'BC').split(' ').map(w=>w[0]).slice(0,2).join('').toUpperCase();
+    })();
+
+    (function init(){
+      renderBlockStats();
+      renderGrid();
+      renderChallengeStats();
+    })();
+  </script>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
